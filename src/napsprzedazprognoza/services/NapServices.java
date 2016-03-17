@@ -489,15 +489,17 @@ public class NapServices {
             else if( rodzaj.equals("plan"))
             {
                 //System.err.println( obKod + " " + kwartal );
-                ret =   (BigDecimal) em.createNativeQuery("select wartosc from nap_sprzedaz_plan "
+                ret =   (BigDecimal) em.createNativeQuery("select sum(wartosc) from nap_sprzedaz_plan "
                         + "where rok = " + rok
-                        + "and dywizja = 'ALL' "
+                        + "and dywizja in ('Z','C') "
                         + "and kwartal = '" + kwartal +"' "
                         + "and ob_pelny_kod = '" + obKod + "'").getSingleResult();  
             }
             
             kwotaRoczna.setRok(rok);
             kwotaRoczna.setRodzaj(rodzaj);
+            if ( ret == null )
+                ret = BigDecimal.ZERO;
             kwotaRoczna.setKwotaIlosc( ret );
         }
         
@@ -535,9 +537,24 @@ public class NapServices {
                     "     and okres >  ( select data_zakonczenia from nap_sprzedaz_prognoza where id = nspw.id_umowa ))\n" +
                     "where kwartal = '" + kwartal + "'").getSingleResult();  
             }
+            else if( rodzaj.equals("plan"))
+            {
+                try {
+                   ret =   (BigDecimal) em.createNativeQuery("select wartosc from nap_sprzedaz_plan "
+                        + "where rok = " + rok
+                        + "and dywizja = 'C' "
+                        + "and kwartal = '" + kwartal +"' "
+                        + "and ob_pelny_kod = '" + obKod + "'").getSingleResult();  
+                }catch(Exception e){
+                    //This catch block catches all the exceptions
+                }
+                 
+            }
             
             kwotaRoczna.setRok(rok);
             kwotaRoczna.setRodzaj(rodzaj);
+            if ( ret == null )
+                ret = BigDecimal.ZERO;
             kwotaRoczna.setKwotaIlosc( ret );
         }
         
