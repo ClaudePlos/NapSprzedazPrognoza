@@ -7,10 +7,7 @@
     <class>napsprzedazprognoza.models.NapvObiektyWPrzedsiebVO</class>
     <class>napsprzedazprognoza.models.NapSprzedazPlanVO</class>
     <properties>
-      <property name="javax.persistence.jdbc.url" value="jdbc:oracle:thin:@192.168.0.220:1521:DB1"/>
-      <property name="javax.persistence.jdbc.user" value="naprzod"/>
-      <property name="javax.persistence.jdbc.driver" value="oracle.jdbc.OracleDriver"/>
-      <property name="javax.persistence.jdbc.password" value="napnap"/>
+      TODO
     </properties>
   </persistence-unit>
 </persistence>
