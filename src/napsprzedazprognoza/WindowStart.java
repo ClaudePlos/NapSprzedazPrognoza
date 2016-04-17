@@ -542,8 +542,17 @@ public class WindowStart extends javax.swing.JFrame {
         try {
             SimpleDateFormat dt3 = new SimpleDateFormat("yyyy-MM-dd");
             
+            
+            
             // zap2
             int row = jTable1.getSelectedRow();
+            
+            if ( row == -1 )
+            {
+                JOptionPane.showMessageDialog(panel, "Zaznacz wiersz modyfikowany!", "Info", JOptionPane.INFORMATION_MESSAGE);
+                return;
+            }
+            
             String id = jTable1.getValueAt(row, 0).toString();
             
             NapSprzedazPrognozaVO sp = new NapSprzedazPrognozaVO();
