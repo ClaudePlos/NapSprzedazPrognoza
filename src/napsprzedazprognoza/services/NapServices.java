@@ -20,6 +20,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
+import napsprzedazprognoza.models.NapPodsumowanieKontraktowDTO;
 import napsprzedazprognoza.models.NapSprzedazPrognozaVO;
 import napsprzedazprognoza.models.NapSprzedazPrognozaWylVO;
 import napsprzedazprognoza.models.NapvObiektyWPrzedsiebVO;
@@ -744,7 +745,7 @@ public class NapServices {
           rok = "2016";
       }
         
-      String quary = "select sum(kwota) from (\n" +
+    /*  String quary = "select sum(kwota) from (\n" +
             "select sk, kwota_miesieczna*12 kwota from nap_sprzedaz_prognoza where id in (\n" +
             "select distinct id_umowa from nap_sprzedaz_prognoza_wyl nspw\n" +
             "                        where to_char(okres,'YYYY') = '" + rok + "'\n" +
@@ -758,17 +759,23 @@ public class NapServices {
 
       
       
-      kwota2 =  (BigDecimal) em.createNativeQuery(quary2).getSingleResult();
+      kwota2 =  (BigDecimal) em.createNativeQuery(quary2).getSingleResult();*/
 
       
-      sprawdzenie = kwota1.subtract(kwota2);
+      //sprawdzenie = kwota1.subtract(kwota2);
+      
+       String quary = "select count(1) from nap_sprzedaz_prognoza_wyl where id_umowa is null";  
+
+      
+      
+      sprawdzenie =  (BigDecimal) em.createNativeQuery(quary).getSingleResult();
       
       if ( sprawdzenie.intValue() != 0 )
       {
           return  "Odśwież wyl. planu !!!";
       }
       
-      return  sprawdzenie + "";
+      return  "";
        
     } 
     
@@ -891,7 +898,38 @@ public class NapServices {
        
     } 
     
-   
+    public List<NapPodsumowanieKontraktowDTO> podajPodsumowanieKontraktow( String naDzien ){
+     
+    List<Object[]> dane = null;            
+    String quary = null;
+    List<NapPodsumowanieKontraktowDTO> podsumowanieKontraktow = new ArrayList<NapPodsumowanieKontraktowDTO>();
+    
+    quary = "select sp.sk, sp.ob_pelny_kod, sp.miasto, opis, kontrakt, sp.data_zakonczenia, sum(kwota), count(1) il_mc \n" +
+            "from nap_sprzedaz_prognoza sp, nap_sprzedaz_prognoza_wyl spw\n" +
+            "where sp.id = spw.ID_UMOWA\n" +
+            "and okres <= sp.data_zakonczenia \n" +
+            "and okres >= to_date(to_char(to_date('" + naDzien + "','YYYY-MM-DD'),'YYYY-MM'),'YYYY-MM')\n" +
+            "group by sp.sk, sp.ob_pelny_kod, sp.miasto, opis, kontrakt, sp.data_zakonczenia";
+    
+    dane =   em.createNativeQuery(quary).getResultList();
+    
+        for ( Object[] sp : dane)
+        {
+          NapPodsumowanieKontraktowDTO s = new NapPodsumowanieKontraktowDTO();
+          s.setSk((String) sp[0]);
+          s.setObPelnyKod((String) sp[1]);
+          s.setMiasto((String) sp[2]);
+          s.setOpis((String) sp[3]);
+          s.setKontrakt((String) sp[4]);
+          s.setDataZakonczenia((Date) sp[5]);
+          s.setKwotaMiesieczna((BigDecimal) sp[6]);
+          s.setIlMiesiecy((BigDecimal) sp[7]);
+          //s.set
+          podsumowanieKontraktow.add(s);
+        }
+        
+        return podsumowanieKontraktow;
+    }
    
     
     

@@ -6,6 +6,7 @@
 package napsprzedazprognoza;
 
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Cursor;
 import java.beans.PropertyChangeEvent;
@@ -20,6 +21,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -59,6 +62,7 @@ public class WindowStart extends javax.swing.JFrame {
     
     private NapServices napServ = NapServices.getInstance();
     
+    Timer timer = new Timer();
     
     List<NapSprzedazPrognozaVO> sprzPrognoza = new ArrayList<NapSprzedazPrognozaVO>();
     
@@ -71,12 +75,12 @@ public class WindowStart extends javax.swing.JFrame {
         initComponents();
         
         
-        try {
+       /* try {
             Thread.sleep(1000);
         } catch (Exception e) {}
-        synchronized (this) {
+        synchronized (this) {*/
             pobierzDane();
-        }
+       // }
   
         
         
@@ -95,6 +99,15 @@ public class WindowStart extends javax.swing.JFrame {
         jTable1.getColumnModel().getColumn(5).setPreferredWidth(195);
         jTable1.getColumnModel().getColumn(6).setPreferredWidth(195);
         jTable1.getColumnModel().getColumn(7).setPreferredWidth(195);
+        
+        
+        timer.scheduleAtFixedRate(new TimerTask() {
+              
+            @Override
+            public void run() {
+                sprawdzCzyOdwiezycWyliczeniePlanu();
+            }
+          }, 1*10*1000, 1*60*1000); // wystartuje po minucie i ponownie po minucie
         
         
     }
@@ -146,6 +159,7 @@ public class WindowStart extends javax.swing.JFrame {
         jButton10 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
         jSeparator3 = new javax.swing.JSeparator();
+        jButton11 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -264,7 +278,7 @@ public class WindowStart extends javax.swing.JFrame {
 
         jLabel8.setText("Rok:");
 
-        jLabel9.setText("jLabel9");
+        jLabel9.setText(".");
 
         jButton9.setText("Zest. na dzień");
         jButton9.addActionListener(new java.awt.event.ActionListener() {
@@ -294,6 +308,13 @@ public class WindowStart extends javax.swing.JFrame {
             }
         });
 
+        jButton11.setText("Podsumowanie KONT");
+        jButton11.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton11ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -303,6 +324,7 @@ public class WindowStart extends javax.swing.JFrame {
             .addComponent(jButton10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jButton9, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jSeparator3)
+            .addComponent(jButton11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -317,7 +339,9 @@ public class WindowStart extends javax.swing.JFrame {
                 .addComponent(buttonZestaw2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton9)
-                .addContainerGap(59, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(jButton11)
+                .addContainerGap(18, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -327,21 +351,19 @@ public class WindowStart extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addContainerGap()
-                                    .addComponent(jLabel9)
-                                    .addGap(91, 91, 91))
-                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                    .addGap(30, 30, 30)
-                                    .addComponent(jLabel8)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                    .addComponent(labData, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGap(4, 4, 4))))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(30, 30, 30)
+                                .addComponent(jLabel8)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(labData, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
@@ -435,9 +457,9 @@ public class WindowStart extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(labData, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel8))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(4, 4, 4)
                         .addComponent(jLabel9)
-                        .addGap(9, 9, 9)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jButton1)
                         .addGap(4, 4, 4)
                         .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -451,6 +473,7 @@ public class WindowStart extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         wyliczNaDzien();
+        sprawdzCzyOdwiezycWyliczeniePlanu();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
@@ -564,7 +587,9 @@ public class WindowStart extends javax.swing.JFrame {
         }
         this.setCursor( Cursor.getDefaultCursor() );
         
-        jLabel9.setText( napServ.wyliczSprawdzenie( labData.getText() ) );
+        
+        
+        sprawdzCzyOdwiezycWyliczeniePlanu();
         
         
     }//GEN-LAST:event_jButton6ActionPerformed
@@ -632,6 +657,18 @@ public class WindowStart extends javax.swing.JFrame {
         
         
     }//GEN-LAST:event_jButton10ActionPerformed
+
+    private void jButton11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton11ActionPerformed
+        // podsumowanie kontrakt
+        
+        this.setCursor( Cursor.getPredefinedCursor( Cursor.WAIT_CURSOR ) );
+        
+        PodsumowanieKontraktow podsumowanieKontraktow = new PodsumowanieKontraktow();
+        podsumowanieKontraktow.setVisible( true );
+        
+        this.setCursor( Cursor.getDefaultCursor() );
+        
+    }//GEN-LAST:event_jButton11ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -796,7 +833,7 @@ public class WindowStart extends javax.swing.JFrame {
     });
         
         
-       jLabel9.setText( napServ.wyliczSprawdzenie( labData.getText() ) );
+       
 
         
     }
@@ -939,7 +976,12 @@ public class WindowStart extends javax.swing.JFrame {
     } 
     
     
-    
+    public void sprawdzCzyOdwiezycWyliczeniePlanu()
+    {
+              jLabel9.setText("Sprawdzam");
+              jLabel9.setText( napServ.wyliczSprawdzenie( labData.getText() ) );
+              jLabel9.setForeground (Color.red);
+    }
   
     
     
@@ -989,6 +1031,7 @@ public class WindowStart extends javax.swing.JFrame {
     private javax.swing.JComboBox comboOB;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton10;
+    private javax.swing.JButton jButton11;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
