@@ -1,0 +1,2 @@
+# NapSprzedazPrognoza
+-- add k.skowronski
