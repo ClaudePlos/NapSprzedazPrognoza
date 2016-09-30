@@ -267,7 +267,7 @@ public class WindowStart extends javax.swing.JFrame {
             }
         });
 
-        jLabel7.setText("Marketing v02 2016-03-17");
+        jLabel7.setText("Marketing v03 2016-04-18");
 
         jButton8.setText("Odśwież");
         jButton8.addActionListener(new java.awt.event.ActionListener() {
@@ -474,6 +474,7 @@ public class WindowStart extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         wyliczNaDzien();
         sprawdzCzyOdwiezycWyliczeniePlanu();
+        JOptionPane.showMessageDialog(panel, "Dane zostały odświeżone", "Info", JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
@@ -550,6 +551,7 @@ public class WindowStart extends javax.swing.JFrame {
             if ( row == -1 )
             {
                 JOptionPane.showMessageDialog(panel, "Zaznacz wiersz modyfikowany!", "Info", JOptionPane.INFORMATION_MESSAGE);
+                this.setCursor( Cursor.getDefaultCursor() );
                 return;
             }
             

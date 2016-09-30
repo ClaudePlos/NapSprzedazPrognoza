@@ -332,7 +332,7 @@
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel7">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Marketing v02 2016-03-17"/>
+        <Property name="text" type="java.lang.String" value="Marketing v03 2016-04-18"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JButton" name="jButton8">

@@ -7,6 +7,7 @@ package napsprzedazprognoza.services;
 
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -371,7 +372,7 @@ public class NapServices {
             }
             else if( rodzaj.equals("planC"))
             {    
-                 ret =  (BigDecimal) em.createNativeQuery("select wartosc from nap_sprzedaz_plan where dywizja = 'C' and rok = " + rok ).getSingleResult();
+                 ret =  (BigDecimal) em.createNativeQuery("select sum(wartosc) from nap_sprzedaz_plan where dywizja = 'C'  and kwartal = 'ROK' and rok = " + rok  ).getSingleResult();
             }
 
             kwotaRoczna.setRok(rok);
@@ -427,7 +428,10 @@ public class NapServices {
             kwotaRoczna.setKwotaIlosc( ret );
         }
         
-
+        if ( kwotaRoczna.getKwotaIlosc() == null )
+        {
+            kwotaRoczna.setKwotaIlosc( new BigDecimal(BigInteger.ZERO));
+        }
         
         return kwotaRoczna;
         
